@@ -35,15 +35,14 @@ public class image_process {
                     (int) (MidPoint.y - eyesDistance * 0.6) * 4,
                     (int) (eyesDistance * 2.2) * 4,
                     (int) (eyesDistance * 2.2) * 4);
-            //画出人脸的区域
+            /*画出人脸的区域
             canvas.drawRect(//矩形框的位置参数
                     ((int) (MidPoint.x - eyesDistance * 1.1)) * 4,
                     ((int) (MidPoint.y - eyesDistance * 0.6)) * 4,
                     ((int) (MidPoint.x + eyesDistance * 1.1)) * 4,
                     ((int) (MidPoint.y + eyesDistance * 1.6)) * 4,
                     paint);
-            //画出人脸区域后要刷新ImageView
-            //imageView.invalidate();
+             */
             return ans;
         } else {
             Log.e("错误:", "检测到0个或多个人脸");

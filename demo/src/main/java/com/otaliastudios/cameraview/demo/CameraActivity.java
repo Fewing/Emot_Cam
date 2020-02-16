@@ -69,9 +69,9 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
     private final Filters[] mAllFilters = Filters.values();
     //yzy's variables
     private  tf tflite = new tf();
-    private  image_process process = new image_process();
+    private  image_process processer = new image_process();
     private  Activity activity =this;
-    private  Bitmap bestmap;
+    private  Bitmap bestmap = null;
     private  float best_score=0.0f;
 
     @Override
@@ -280,7 +280,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
                 @Override
                 public void onBitmapReady(Bitmap bitmap) {
                     float score;
-                    Bitmap face_map = process.process(bitmap);
+                    Bitmap face_map = processer.process(bitmap);
                     if(face_map!=null)
                     {
                         score = tflite.predict(face_map,activity);
@@ -301,8 +301,15 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
                 CPP();
             if(picid==10)
             {
-                Toast.makeText(activity,"保存照片", Toast.LENGTH_SHORT).show();
-                savePicture();//存为.jpg文件
+                if(bestmap!=null)
+                {
+                    Toast.makeText(activity,"保存照片", Toast.LENGTH_SHORT).show();
+                    savePicture();//存为.jpg文件
+                }
+                else
+                {
+                    Toast.makeText(activity,"未检测到人脸", Toast.LENGTH_SHORT).show();
+                }
             }
         }
         private void savePicture() {
