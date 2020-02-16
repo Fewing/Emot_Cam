@@ -1,4 +1,4 @@
-package com.otaliastudios.cameraview.demo;
+package com.fecostudio.cameraview.demo;
 
 import android.app.Activity;
 import android.app.ProgressDialog;

@@ -1,4 +1,4 @@
-package com.otaliastudios.cameraview.demo;
+package com.fecostudio.cameraview.demo;
 
 
 import android.annotation.SuppressLint;

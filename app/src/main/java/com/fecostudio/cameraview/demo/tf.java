@@ -1,4 +1,4 @@
-package com.otaliastudios.cameraview.demo;
+package com.fecostudio.cameraview.demo;
 
 import org.tensorflow.lite.gpu.GpuDelegate;
 import org.tensorflow.lite.nnapi.NnApiDelegate;
