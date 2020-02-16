@@ -1,4 +1,4 @@
-package com.fecostudio.cameraview.demo;
+package com.fecostudio.EmotCam.app;
 
 import android.Manifest;
 import android.animation.ValueAnimator;
@@ -77,7 +77,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        tflite.load_model(this);
+        tflite.load_model(this);//加载tflite模型
         setContentView(R.layout.activity_camera);
         CameraLogger.setLogLevel(CameraLogger.LEVEL_VERBOSE);
         //切换无任务栏

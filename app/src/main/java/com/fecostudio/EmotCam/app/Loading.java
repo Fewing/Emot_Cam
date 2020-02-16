@@ -1,4 +1,4 @@
-package com.fecostudio.cameraview.demo;
+package com.fecostudio.EmotCam.app;
 
 import android.app.Activity;
 import android.app.ProgressDialog;

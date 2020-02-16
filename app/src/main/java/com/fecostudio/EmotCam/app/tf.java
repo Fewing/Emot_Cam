@@ -1,8 +1,6 @@
-package com.fecostudio.cameraview.demo;
+package com.fecostudio.EmotCam.app;
 
 import org.tensorflow.lite.gpu.GpuDelegate;
-import org.tensorflow.lite.nnapi.NnApiDelegate;
-import org.tensorflow.lite.support.common.TensorOperator;
 import org.tensorflow.lite.support.image.ImageProcessor;
 import org.tensorflow.lite.support.image.TensorImage;
 import org.tensorflow.lite.support.image.ops.ResizeOp;
@@ -15,13 +13,9 @@ import org.tensorflow.lite.support.common.TensorProcessor;
 
 
 import android.app.Activity;
-import android.content.pm.FeatureGroupInfo;
 import android.graphics.Bitmap;
 import android.util.Log;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.lang.reflect.Field;
 import java.nio.MappedByteBuffer;
 import java.io.IOException;
 
