@@ -68,10 +68,10 @@ public final class CameraLogger {
                         @NonNull String message,
                         @Nullable Throwable throwable) {
             switch (level) {
-                case LEVEL_VERBOSE: Log.v(tag, message, throwable); break;
-                case LEVEL_INFO: Log.i(tag, message, throwable); break;
-                case LEVEL_WARNING: Log.w(tag, message, throwable); break;
-                case LEVEL_ERROR: Log.e(tag, message, throwable); break;
+                //case LEVEL_VERBOSE: Log.v(tag, message, throwable); break;
+                //case LEVEL_INFO: Log.i(tag, message, throwable); break;
+                //case LEVEL_WARNING: Log.w(tag, message, throwable); break;
+               // case LEVEL_ERROR: Log.e(tag, message, throwable); break;
             }
         }
     };
@@ -193,7 +193,7 @@ public final class CameraLogger {
         }
         String string = message.toString().trim();
         for (Logger logger : sLoggers) {
-            logger.log(level, mTag, string, throwable);
+            //logger.log(level, mTag, string, throwable);
         }
         lastMessage = string;
         lastTag = mTag;
