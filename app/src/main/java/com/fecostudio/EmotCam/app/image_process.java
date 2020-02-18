@@ -25,7 +25,7 @@ public class image_process {
         Log.v("realFaceNum", String.valueOf(realFaceNum));
         if (realFaceNum == 1) {
             PointF MidPoint = new PointF();
-            Canvas canvas = new Canvas(bitmap);
+            //Canvas canvas = new Canvas(bitmap);
             float eyesDistance;
             FaceDetector.Face face = faces[0];
             face.getMidPoint(MidPoint);//获取人脸中心点
