@@ -21,6 +21,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.os.Environment;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -100,15 +101,16 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         if (mPermissionList.isEmpty()) {//未授予的权限为空，表示都授予了
             path = Environment.getExternalStorageDirectory().getAbsolutePath() +"/DCIM/";
             Toast.makeText(CameraActivity.this,path,Toast.LENGTH_LONG).show();
+
             String tmpFilePath = path + "Emotcam/";
             File tmpFile = new File(tmpFilePath);
             if (!tmpFile.exists()) {
+                Log.e("成功:", "成功进入建立文件夹部分");
                 tmpFile.mkdir();
             }
             path=tmpFilePath;
             //boolean fileExist = fileIsExists(path);
             //readImg(showImg);
-
         } else {//请求权限方法
             String[] permissions = mPermissionList.toArray(new String[mPermissionList.size()]);//将List转为数组
             ActivityCompat.requestPermissions(CameraActivity.this, permissions, 1);
@@ -382,8 +384,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         }
         if (camera.isTakingPicture()) return;
         mCaptureTime = System.currentTimeMillis();
-
-        message("正在拍摄", false);
+        Log.e("成功:", "正在拍摄:" + picid + "张" );
         //Toast.makeText(this, picid, Toast.LENGTH_SHORT).show();
         camera.takePicture();
     }
