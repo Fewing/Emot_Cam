@@ -12,7 +12,9 @@ import android.graphics.Rect;
 import android.graphics.YuvImage;
 import android.os.Bundle;
 import android.os.Handler;
+
 import androidx.annotation.NonNull;
+
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import androidx.annotation.Nullable;
@@ -69,11 +71,12 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
     private int mCurrentFilter = 0;
     private final Filters[] mAllFilters = Filters.values();
     //yzy's variables
-    private  tf tflite = new tf();
-    private  image_process processer = new image_process();
-    private  Activity activity =this;
-    private  Bitmap bestmap = null;
-    private  float best_score=0.0f;
+    long cam_time = 0;
+    private tf tflite = new tf();
+    private image_process processer = new image_process();
+    private Activity activity = this;
+    private Bitmap bestmap = null;
+    private float best_score = 0.0f;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,8 +102,8 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
             }
         }
         if (mPermissionList.isEmpty()) {//未授予的权限为空，表示都授予了
-            path = Environment.getExternalStorageDirectory().getAbsolutePath() +"/DCIM/";
-            Toast.makeText(CameraActivity.this,path,Toast.LENGTH_LONG).show();
+            path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/DCIM/";
+            Toast.makeText(CameraActivity.this, path, Toast.LENGTH_LONG).show();
 
             String tmpFilePath = path + "Emotcam/";
             File tmpFile = new File(tmpFilePath);
@@ -108,7 +111,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
                 Log.e("成功:", "成功进入建立文件夹部分");
                 tmpFile.mkdir();
             }
-            path=tmpFilePath;
+            path = tmpFilePath;
             //boolean fileExist = fileIsExists(path);
             //readImg(showImg);
         } else {//请求权限方法
@@ -179,7 +182,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
                 new Option.Tap(), new Option.LongTap(),
                 // Watermarks
                 //new Option.OverlayInPreview(watermark),
-               // new Option.OverlayInPictureSnapshot(watermark),
+                // new Option.OverlayInPictureSnapshot(watermark),
                 // Option.OverlayInVideoSnapshot(watermark),
                 // Frame Processing
                 new Option.FrameProcessingFormat(),
@@ -276,48 +279,45 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
             // This can happen if picture was taken with a gesture.
             long callbackTime = System.currentTimeMillis();
             if (mCaptureTime == 0) mCaptureTime = callbackTime - 300;
-            LOG.w("onPictureTaken called! Launching activity. Delay:", callbackTime - mCaptureTime);
-
+            //LOG.v("onPictureTaken called! Launching activity. Delay:", callbackTime - mCaptureTime);
+            Log.v("拍照时间",(callbackTime - mCaptureTime)+"ms");
             result.toBitmap(2000, 2000, new BitmapCallback() {
                 @Override
                 public void onBitmapReady(Bitmap bitmap) {
                     float score;
                     Bitmap face_map = processer.process(bitmap);
-                    if(face_map!=null)
-                    {
-                        score = tflite.predict(face_map,activity);
+                    if (face_map != null) {
+                        score = tflite.predict(face_map, activity);
+                        Log.v("分数", score + "分数");
+                    } else {
+                        score = 0.0f;
                     }
-                    else
-                    {
-                        score=0.0f;
-                    }
-                    if(score>best_score)
-                    {
-                        bestmap=bitmap;
-                        best_score=score;
+                    if (score > best_score) {
+                        bestmap = bitmap;
+                        best_score = score;
                     }
                     picid++;
                 }
             });
-            if(picid<10)//连拍张数
-                CPP();
-            if(picid==10)
-            {
-                if(bestmap!=null)
-                {
-                    Toast.makeText(activity,"保存照片", Toast.LENGTH_SHORT).show();
+            long now_time = System.currentTimeMillis();
+            if (now_time - cam_time <= 4000){
+                capturePicture();
+            }
+            else {
+                if (bestmap != null) {
+                    Toast.makeText(activity, "保存照片", Toast.LENGTH_SHORT).show();
                     savePicture();//存为.jpg文件
+                } else {
+                    Toast.makeText(activity, "未检测到人脸", Toast.LENGTH_SHORT).show();
+                    Log.e("错误", "未检测到人脸");
                 }
-                else
-                {
-                    Toast.makeText(activity,"未检测到人脸", Toast.LENGTH_SHORT).show();
-                }
+                picid = 0;
             }
         }
+
         private void savePicture() {
-            picid=0;
             String fileName = "TEST_";
-            fileName+=String.valueOf(best_score);
+            fileName += String.valueOf(best_score);
             try {
                 File file = new File(path + fileName + ".jpg");
                 FileOutputStream out = new FileOutputStream(file);
@@ -346,8 +346,13 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.capturePicture: capturePicture(); break;
-            case R.id.toggleCamera: toggleCamera(); break;
+            case R.id.capturePicture:
+                capturePicture();
+                cam_time = System.currentTimeMillis();
+                break;
+            case R.id.toggleCamera:
+                toggleCamera();
+                break;
         }
     }
 
@@ -360,35 +365,27 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         }
         super.onBackPressed();
     }
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //Log.d("msg", "The onResume() event");
+    }
     private void edit() {
         BottomSheetBehavior b = BottomSheetBehavior.from(controlPanel);
         b.setState(BottomSheetBehavior.STATE_COLLAPSED);
     }
 
     private void capturePicture() {
-        final Handler handler=new Handler();
-        Runnable runnable=new Runnable(){
-            @Override
-            public void run(){
-                CPP();
-            }
-        };
-        handler.post(runnable);
-    }
-
-    private void CPP() {
         if (camera.getMode() == Mode.VIDEO) {
             message("请开启照片模式。", false);
             return;
         }
-        if (camera.isTakingPicture()) return;
+        //if (camera.isTakingPicture()) return;
         mCaptureTime = System.currentTimeMillis();
-        Log.e("成功:", "正在拍摄:" + picid + "张" );
+        Log.v("成功:", "正在拍摄:" + picid + "张");
         //Toast.makeText(this, picid, Toast.LENGTH_SHORT).show();
         camera.takePicture();
     }
-
     private void toggleCamera() {
         if (camera.isTakingPicture() || camera.isTakingVideo()) return;
         switch (camera.toggleFacing()) {
