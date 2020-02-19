@@ -68,8 +68,6 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
     };
     List<String> mPermissionList = new ArrayList<>();
     /*权限获取*/
-    private int mCurrentFilter = 0;
-    private final Filters[] mAllFilters = Filters.values();
     //yzy's variables
     long cam_time = 0;
     private tf tflite = new tf();
@@ -95,7 +93,6 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         camera.setLifecycleOwner(this);
         camera.addCameraListener(new Listener());
         /* 权限获取 */
-
         mPermissionList.clear();
         for (int i = 0; i < permissions.length; i++) {
             if (ContextCompat.checkSelfPermission(CameraActivity.this, permissions[i]) != PackageManager.PERMISSION_GRANTED) {
@@ -120,7 +117,6 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
             ActivityCompat.requestPermissions(CameraActivity.this, permissions, 1);
         }
         /* 权限获取 */
-
         if (USE_FRAME_PROCESSOR) {
             camera.addFrameProcessor(new FrameProcessor() {
                 private long lastTime = System.currentTimeMillis();
@@ -273,15 +269,10 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         @Override
         public void onPictureTaken(@NonNull final PictureResult result) {
             super.onPictureTaken(result);
-            if (camera.isTakingVideo()) {
-                message("Captured while taking video. Size=" + result.getSize(), false);
-                return;
-            }
-            // This can happen if picture was taken with a gesture.
             long callbackTime = System.currentTimeMillis();
             if (mCaptureTime == 0) mCaptureTime = callbackTime - 300;
             //LOG.v("onPictureTaken called! Launching activity. Delay:", callbackTime - mCaptureTime);
-            Log.v("拍照时间",(callbackTime - mCaptureTime)+"ms");
+            Log.v("拍照时间", (callbackTime - mCaptureTime) + "ms");
             result.toBitmap(2000, 2000, new BitmapCallback() {
                 @Override
                 public void onBitmapReady(Bitmap bitmap) {
@@ -301,10 +292,9 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
                 }
             });
             long now_time = System.currentTimeMillis();
-            if (now_time - cam_time <= 4000){
+            if (now_time - cam_time <= 4000) {
                 capturePicture();
-            }
-            else {
+            } else {
                 if (bestmap != null) {
                     Toast.makeText(activity, "保存照片", Toast.LENGTH_SHORT).show();
                     savePicture();//存为.jpg文件
@@ -312,6 +302,8 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
                     Toast.makeText(activity, "未检测到人脸", Toast.LENGTH_SHORT).show();
                     Log.e("错误", "未检测到人脸");
                 }
+                best_score = 0.0f;
+                bestmap = null;
                 picid = 0;
             }
         }
@@ -366,27 +358,30 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         }
         super.onBackPressed();
     }
+
     @Override
     protected void onResume() {
         super.onResume();
         //Log.d("msg", "The onResume() event");
     }
+
     private void edit() {
         BottomSheetBehavior b = BottomSheetBehavior.from(controlPanel);
         b.setState(BottomSheetBehavior.STATE_COLLAPSED);
     }
 
     private void capturePicture() {
-        if (camera.getMode() == Mode.VIDEO) {
+        /*if (camera.getMode() == Mode.VIDEO) {
             message("请开启照片模式。", false);
             return;
-        }
-        //if (camera.isTakingPicture()) return;
+        }*/
+        if (camera.isTakingPicture()) return;
         mCaptureTime = System.currentTimeMillis();
-        Log.e("成功:", "正在拍摄" + picid);
+        Log.v("成功:", "正在拍摄" + picid);
         //Toast.makeText(this, picid, Toast.LENGTH_SHORT).show();
         camera.takePicture();
     }
+
     private void toggleCamera() {
         if (camera.isTakingPicture() || camera.isTakingVideo()) return;
         switch (camera.toggleFacing()) {
@@ -422,12 +417,13 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        Log.e("权限", permissions[0]);
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         boolean valid = true;
         for (int grantResult : grantResults) {
             valid = valid && grantResult == PackageManager.PERMISSION_GRANTED;
         }
-        if (valid && !camera.isOpened()) {
+        if (valid && !camera.isOpened() && permissions[0].equals("android.permission.CAMERA")) {
             camera.open();
         }
     }

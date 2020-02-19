@@ -19,6 +19,7 @@ import android.location.Location;
 import android.media.Image;
 import android.media.ImageReader;
 import android.os.Build;
+import android.util.Log;
 import android.util.Pair;
 import android.util.Range;
 import android.util.Rational;
@@ -108,7 +109,7 @@ public class Camera2Engine extends CameraBaseEngine implements
 
     // Picture capturing
     private ImageReader mPictureReader;
-    private final boolean mPictureCaptureStopsPreview = false; // can be configurable at some point
+    private final boolean mPictureCaptureStopsPreview = true; // can be configurable at some point
 
     // Actions
     // Use COW to properly synchronize the list. We'll iterate much more than mutate
@@ -802,6 +803,7 @@ public class Camera2Engine extends CameraBaseEngine implements
     @EngineThread
     @Override
     protected void onTakePicture(@NonNull final PictureResult.Stub stub, boolean doMetering) {
+
         if (doMetering) {
             LOG.i("onTakePicture:", "doMetering is true. Delaying.");
             Action action = Actions.timeout(METER_TIMEOUT_SHORT, createMeterAction(null));

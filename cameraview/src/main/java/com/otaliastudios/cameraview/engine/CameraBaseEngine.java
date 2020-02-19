@@ -3,6 +3,7 @@ package com.otaliastudios.cameraview.engine;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.location.Location;
+import android.util.Log;
 
 import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
@@ -487,7 +488,7 @@ public abstract class CameraBaseEngine extends CameraEngine {
             @Override
             public void run() {
                 LOG.i("takePicture:", "running. isTakingPicture:", isTakingPicture());
-                if (isTakingPicture()) return;
+                //if (isTakingPicture()) return;
                 if (mMode == Mode.VIDEO) {
                     throw new IllegalStateException("Can't take hq pictures while in VIDEO mode");
                 }
