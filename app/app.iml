@@ -127,5 +127,7 @@
     <orderEntry type="library" name="Gradle: org.tensorflow:tensorflow-lite-support:0.0.0-nightly@aar" level="project" />
     <orderEntry type="module" module-name="cameraview" />
     <orderEntry type="module" module-name="cameraview" />
+    <orderEntry type="module" module-name="cameraview" />
+    <orderEntry type="module" module-name="cameraview" />
   </component>
 </module>

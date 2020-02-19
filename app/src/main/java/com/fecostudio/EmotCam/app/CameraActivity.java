@@ -77,6 +77,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         tflite.load_model(this);//加载tflite模型
         setContentView(R.layout.activity_camera);
@@ -384,7 +385,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         }
         if (camera.isTakingPicture()) return;
         mCaptureTime = System.currentTimeMillis();
-        Log.e("成功:", "正在拍摄:" + picid + "张" );
+        Log.e("成功:", "正在拍摄" + picid);
         //Toast.makeText(this, picid, Toast.LENGTH_SHORT).show();
         camera.takePicture();
     }
