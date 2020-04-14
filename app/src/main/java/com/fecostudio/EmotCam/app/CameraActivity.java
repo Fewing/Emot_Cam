@@ -276,11 +276,14 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
             result.toBitmap(2000, 2000, new BitmapCallback() {
                 @Override
                 public void onBitmapReady(Bitmap bitmap) {
-                    float score;
-                    Bitmap face_map = processer.process(bitmap);
+                    float score=0;
+                    Bitmap[] face_map = processer.process(bitmap);
                     if (face_map != null) {
-                        score = tflite.predict(face_map, activity);
-                        Log.v("分数", score + "分数");
+                        for (int i = 0; i < face_map.length; i++) {
+                            score += tflite.predict(face_map[i], activity);
+                        }
+                        score /= face_map.length;
+                        Log.v("分数", String.valueOf(score));
                     } else {
                         score = 0.0f;
                     }

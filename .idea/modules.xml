@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Emot_Cam.iml" filepath="$PROJECT_DIR$/Emot_Cam.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/cameraview/cameraview.iml" filepath="$PROJECT_DIR$/cameraview/cameraview.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Emot_Cam.iml" filepath="$PROJECT_DIR$/Emot_Cam.iml" group="Emot_Cam" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="Emot_Cam/app" />
+      <module fileurl="file://$PROJECT_DIR$/cameraview/cameraview.iml" filepath="$PROJECT_DIR$/cameraview/cameraview.iml" group="Emot_Cam/cameraview" />
     </modules>
   </component>
 </project>
