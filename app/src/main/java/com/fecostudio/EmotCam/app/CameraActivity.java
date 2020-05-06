@@ -318,8 +318,9 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
                     PicturePreviewActivity.setPictureResult(bestres);
                     Intent intent = new Intent(CameraActivity.this, PicturePreviewActivity.class);
                     //intent.putExtra("delay", callbackTime - mCaptureTime);
-                    startActivity(intent);
+                    startActivityForResult(intent,0);
 
+                    Log.e("Flag是：",String.valueOf(saveFlag));
                     if(saveFlag==true){
                         previewSave(bestmap);
                         Log.e("Flag是：",String.valueOf(saveFlag));
