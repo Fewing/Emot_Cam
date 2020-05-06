@@ -1,43 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@android:color/white">
-    <LinearLayout
+    android:background="#FF444444"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Camera -->
+    <ImageView
+        android:id="@+id/image"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_gravity="center_horizontal"
+        android:adjustViewBounds="true" />
 
-        <ImageView
-            android:id="@+id/image"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:adjustViewBounds="true" />
 
-        <com.fecostudio.EmotCam.app.MessageView
-            android:id="@+id/nativeCaptureResolution"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+    <!-- Controls -->
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:layout_gravity="bottom"
+        android:background="@color/colorPrimary"
+        android:orientation="vertical"
+        android:weightSum="3">
 
-        <com.fecostudio.EmotCam.app.MessageView
-            android:id="@+id/captureLatency"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
 
-        <com.fecostudio.EmotCam.app.MessageView
-            android:id="@+id/exifRotation"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
         <ImageButton
-            android:id="@+id/debug"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
+            android:id="@+id/previewSave"
+            style="@style/Widget.AppCompat.ImageButton"
+            android:layout_width="166dp"
+            android:layout_height="44dp"
+            android:layout_gravity="center"
             android:layout_margin="16dp"
-            android:background="@drawable/background"
-            android:elevation="3dp"
-            app:srcCompat="@drawable/ic_filters" />
+            android:background="@drawable/save"
+            android:scaleType="center" />
+
+        <ImageButton
+            android:id="@+id/reShot"
+            android:layout_width="104dp"
+            android:layout_height="29dp"
+            android:layout_gravity="center"
+            android:background="@drawable/bg"
+            android:padding="8dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/reshotone" />
+
     </LinearLayout>
 
-</ScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

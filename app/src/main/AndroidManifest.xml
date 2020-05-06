@@ -24,6 +24,10 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name="com.fecostudio.EmotCam.app.PicturePreviewActivity"
+            android:label="Picture Preview" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
