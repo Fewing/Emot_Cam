@@ -63,11 +63,8 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
     private final static CameraLogger LOG = CameraLogger.create("DemoApp");
     private final static boolean USE_FRAME_PROCESSOR = true;
     private final static boolean DECODE_BITMAP = true;
+    public static CameraActivity Instance = null;
 
-    public static boolean saveFlag = false;
-    public static void setSaveFlag(boolean t){
-        saveFlag=t;
-    }
     private CameraView camera;
     private ViewGroup controlPanel;
     private long mCaptureTime;
@@ -91,7 +88,8 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setSaveFlag(false);
+        Instance=this;
+
         setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         tflite.load_model(this);//加载tflite模型
@@ -318,13 +316,8 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
                     PicturePreviewActivity.setPictureResult(bestres);
                     Intent intent = new Intent(CameraActivity.this, PicturePreviewActivity.class);
                     //intent.putExtra("delay", callbackTime - mCaptureTime);
-                    startActivityForResult(intent,0);
+                    startActivity(intent);
 
-                    Log.e("Flag是：",String.valueOf(saveFlag));
-                    if(saveFlag==true){
-                        previewSave(bestmap);
-                        Log.e("Flag是：",String.valueOf(saveFlag));
-                    }
                     //savePicture();//存为.jpg文件
                 } else {
                     Toast.makeText(activity, "未检测到人脸", Toast.LENGTH_SHORT).show();
@@ -410,7 +403,6 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
             else{
                 savePicture(bitmap);
             }
-            setSaveFlag(false);
         }
 
         private void savePictureQ(String fileName,Bitmap bitmap) {
@@ -472,6 +464,70 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         public void onZoomChanged(float newValue, @NonNull float[] bounds, @Nullable PointF[] fingers) {
             super.onZoomChanged(newValue, bounds, fingers);
             message("Zoom:" + newValue, false);
+        }
+    }
+
+    public void previewSave(Bitmap bitmap){
+        Date nowDate = new Date();
+        SimpleDateFormat fileFormat = new SimpleDateFormat ("yyyy-MM-dd-hh-mm-ss");
+
+        String fileName = fileFormat.format(nowDate);
+        //fileName += String.valueOf(best_score);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            savePictureQ(fileName,bitmap);
+        }
+        else{
+            savePicture(bitmap);
+        }
+    }
+
+    private void savePictureQ(String fileName,Bitmap bitmap) {
+        try {
+            //设置保存参数到ContentValues中
+            final String relativeLocation = Environment.DIRECTORY_PICTURES;
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, fileName);
+            //设置文件类型
+            contentValues.put(MediaStore.MediaColumns.MIME_TYPE,"image/JPEG");
+            contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, relativeLocation);
+
+            final Uri contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+            Uri uri = getContentResolver().insert(contentUri, contentValues);
+            if (uri != null) {
+                Log.e("成功:", "uri看起来没问题");
+                //若生成了uri，则表示该文件添加成功
+                //使用流将内容写入该uri中即可
+                OutputStream outputStream = getContentResolver().openOutputStream(uri);
+                if (outputStream != null) {
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+                    outputStream.flush();
+                    outputStream.close();
+                    Log.e("成功:", "输出流看起来没问题");
+                }
+                //Toast.makeText(activity, "保存成功", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+           // Toast.makeText(activity, "保存失败", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
+    }
+
+    private void savePicture(Bitmap bitmap) {
+        Date nowDate = new Date();
+        SimpleDateFormat fileFormat = new SimpleDateFormat ("yyyy-MM-dd-hh-mm-ss");
+
+        String fileName = fileFormat.format(nowDate).toString();
+        fileName += String.valueOf(best_score);
+        File file = new File(path, fileName + ".jpg");
+        try {
+            FileOutputStream out = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+            out.flush();
+            out.close();
+        } catch (Exception e) {
+            Toast.makeText(activity, "保存失败", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
         }
     }
 

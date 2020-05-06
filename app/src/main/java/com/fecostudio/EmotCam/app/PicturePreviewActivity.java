@@ -159,12 +159,16 @@ public class PicturePreviewActivity extends AppCompatActivity implements View.On
     private void newPreviewSave(){
         //Intent intent = getIntent();
         //this.setResult(0, intent);
-        CameraActivity.setSaveFlag(true);
+        picture.toBitmap(2000, 2000, new BitmapCallback() {
+                    @Override
+                    public void onBitmapReady(Bitmap bitmap) {
+                        CameraActivity.Instance.previewSave(bitmap);
+                    }
+                });
         finish();
     }
 
     private void reShot(){
-        CameraActivity.setSaveFlag(false);
         //Intent intent = getIntent();
         //this.setResult(1, intent);
         finish();
