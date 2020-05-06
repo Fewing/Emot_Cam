@@ -318,11 +318,10 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
                     PicturePreviewActivity.setPictureResult(bestres);
                     Intent intent = new Intent(CameraActivity.this, PicturePreviewActivity.class);
                     //intent.putExtra("delay", callbackTime - mCaptureTime);
-                    startActivityForResult(intent,0);//如何get到resultCode?
+                    startActivity(intent);
 
-                    if(saveFlag){
-                        previewSave();
-                        setSaveFlag(false);
+                    if(saveFlag==true){
+                        previewSave(bestmap);
                         Log.e("Flag是：",String.valueOf(saveFlag));
                     }
                     //savePicture();//存为.jpg文件
@@ -397,7 +396,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
             }
 
         }   */
-        private void previewSave(){
+        private void previewSave(Bitmap bitmap){
             Date nowDate = new Date();
             SimpleDateFormat fileFormat = new SimpleDateFormat ("yyyy-MM-dd-hh-mm-ss");
 
@@ -405,15 +404,15 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
             //fileName += String.valueOf(best_score);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                previewSaveQ(fileName);
+                savePictureQ(fileName,bitmap);
             }
             else{
-                savePicture();
+                savePicture(bitmap);
             }
             setSaveFlag(false);
         }
 
-        public void previewSaveQ(String fileName) {
+        private void savePictureQ(String fileName,Bitmap bitmap) {
             try {
                 //设置保存参数到ContentValues中
                 final String relativeLocation = Environment.DIRECTORY_PICTURES;
@@ -431,20 +430,20 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
                     //使用流将内容写入该uri中即可
                     OutputStream outputStream = getContentResolver().openOutputStream(uri);
                     if (outputStream != null) {
-                        bestmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
                         outputStream.flush();
                         outputStream.close();
                         Log.e("成功:", "输出流看起来没问题");
                     }
-                    Log.e("成功:", "我的toast呢——");
                     Toast.makeText(activity, "保存成功", Toast.LENGTH_SHORT).show();
                 }
             } catch (Exception e) {
                 Toast.makeText(activity, "保存失败", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
             }
         }
 
-        private void savePicture() {
+        private void savePicture(Bitmap bitmap) {
             Date nowDate = new Date();
             SimpleDateFormat fileFormat = new SimpleDateFormat ("yyyy-MM-dd-hh-mm-ss");
 
@@ -453,7 +452,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
             File file = new File(path, fileName + ".jpg");
             try {
                 FileOutputStream out = new FileOutputStream(file);
-                bestmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
                 out.flush();
                 out.close();
             } catch (Exception e) {
@@ -525,11 +524,11 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         if (camera.isTakingPicture() || camera.isTakingVideo()) return;
         switch (camera.toggleFacing()) {
             case BACK:
-                message("切换到后置", false);
+                //message("切换到后置", false);
                 break;
 
             case FRONT:
-                message("切换到前置", false);
+                //message("切换到前置", false);
                 break;
         }
     }

@@ -167,8 +167,7 @@ public class PicturePreviewActivity extends AppCompatActivity implements View.On
         CameraActivity.setSaveFlag(false);
         //Intent intent = getIntent();
         //this.setResult(1, intent);
-        CameraActivity.setSaveFlag(true);
-        this.finish();
+        finish();
     }
 
 }
