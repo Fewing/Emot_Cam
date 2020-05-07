@@ -7,6 +7,7 @@ import org.tensorflow.lite.support.image.ops.ResizeOp;
 import org.tensorflow.lite.DataType;
 import org.tensorflow.lite.support.common.FileUtil;
 import org.tensorflow.lite.Interpreter;
+import org.tensorflow.lite.support.image.ops.Rot90Op;
 import org.tensorflow.lite.support.tensorbuffer.TensorBuffer;
 import org.tensorflow.lite.support.common.ops.NormalizeOp;
 import org.tensorflow.lite.support.common.TensorProcessor;

@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
@@ -49,6 +50,7 @@ import java.util.List;
 public class PicturePreviewActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static PictureResult picture;
+    private static Bitmap bitmap;
     private Activity activity = this;
     private String path;
     private Bitmap finalResult;
@@ -62,6 +64,9 @@ public class PicturePreviewActivity extends AppCompatActivity implements View.On
 
     public static void setPictureResult(@Nullable PictureResult pictureResult) {
         picture = pictureResult;
+    }
+    public static void setBitmapResult(@Nullable Bitmap bestMap) {
+        bitmap = bestMap;
     }
 
     @Override
@@ -112,12 +117,17 @@ public class PicturePreviewActivity extends AppCompatActivity implements View.On
 
         AspectRatio ratio = AspectRatio.of(result.getSize());
         try {
-            result.toBitmap(1000, 1000, new BitmapCallback() {
+            /*result.toBitmap(1000, 1000, new BitmapCallback() {
                 @Override
                 public void onBitmapReady(Bitmap bitmap) {
+
+                    Matrix matrix = new Matrix();
+                    matrix.postScale(-1, 1);
+                    bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
                     imageView.setImageBitmap(bitmap);
                 }
-            });
+            });*/
+            imageView.setImageBitmap(bitmap);
         } catch (UnsupportedOperationException e) {
             imageView.setImageDrawable(new ColorDrawable(Color.GREEN));
             Toast.makeText(this, "出现了无法预览的未知错误？？" + picture.getFormat(),
@@ -142,6 +152,7 @@ public class PicturePreviewActivity extends AppCompatActivity implements View.On
         super.onDestroy();
         if (!isChangingConfigurations()) {
             setPictureResult(null);
+            setBitmapResult(null);
         }
     }
 
@@ -159,12 +170,16 @@ public class PicturePreviewActivity extends AppCompatActivity implements View.On
     private void newPreviewSave(){
         //Intent intent = getIntent();
         //this.setResult(0, intent);
-        picture.toBitmap(2000, 2000, new BitmapCallback() {
+        /*picture.toBitmap(2000, 2000, new BitmapCallback() {
                     @Override
                     public void onBitmapReady(Bitmap bitmap) {
+                        Matrix matrix = new Matrix();
+                        matrix.postRotate(180);
+                        bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
                         CameraActivity.Instance.previewSave(bitmap);
                     }
-                });
+                });*/
+        CameraActivity.Instance.previewSave(bitmap);
         finish();
     }
 

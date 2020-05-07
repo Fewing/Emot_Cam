@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.ImageFormat;
+import android.graphics.Matrix;
 import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.YuvImage;
@@ -41,6 +42,7 @@ import com.otaliastudios.cameraview.CameraLogger;
 import com.otaliastudios.cameraview.CameraOptions;
 import com.otaliastudios.cameraview.CameraView;
 import com.otaliastudios.cameraview.PictureResult;
+import com.otaliastudios.cameraview.controls.Facing;
 import com.otaliastudios.cameraview.controls.Mode;
 import com.otaliastudios.cameraview.controls.Preview;
 import com.otaliastudios.cameraview.filter.Filters;
@@ -287,13 +289,18 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
             result.toBitmap(2000, 2000, new BitmapCallback() {
                 @Override
                 public void onBitmapReady(Bitmap bitmap) {
+                    if(camera.getFacing()== Facing.FRONT) {
+                        Matrix matrix = new Matrix();
+                        matrix.postScale(-1, 1);
+                        bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+                    }//镜像自拍照片
                     float score=0;
-                    Bitmap[] face_map = processer.process(bitmap);
-                    if (face_map != null) {
-                        for (int i = 0; i < face_map.length; i++) {
-                            score += tflite.predict(face_map[i], activity);
+                    Bitmap[] face_maps = processer.process(bitmap);
+                    if (face_maps != null) {
+                        for (int i = 0; i < face_maps.length; i++) {
+                            score += tflite.predict(face_maps[i], activity);
                         }
-                        score /= face_map.length;
+                        score /= face_maps.length;
                         Log.v("分数", String.valueOf(score));
                     } else {
                         score = 0.0f;
@@ -314,6 +321,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
                     //Toast.makeText(activity, "保存照片", Toast.LENGTH_SHORT).show();
 
                     PicturePreviewActivity.setPictureResult(bestres);
+                    PicturePreviewActivity.setBitmapResult(bestmap);
                     Intent intent = new Intent(CameraActivity.this, PicturePreviewActivity.class);
                     //intent.putExtra("delay", callbackTime - mCaptureTime);
                     startActivity(intent);
@@ -535,6 +543,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.capturePicture:
+                Toast.makeText(activity, "正在拍摄", Toast.LENGTH_SHORT).show();
                 capturePicture();
                 cam_time = System.currentTimeMillis();
                 break;
