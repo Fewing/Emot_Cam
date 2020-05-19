@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "933038503949",
+    "firebase_url": "https://emotcam.firebaseio.com",
+    "project_id": "emotcam",
+    "storage_bucket": "emotcam.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:933038503949:android:7595a20aeee3d90af23d44",
+        "android_client_info": {
+          "package_name": "com.fecostudio.EmotCam.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "933038503949-k3bj6loqke9mrbvsq80flq3b7mf8oifj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA2VPRe7tpGy8THUtfuQ2WOMR4vVuTAMxc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "933038503949-k3bj6loqke9mrbvsq80flq3b7mf8oifj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

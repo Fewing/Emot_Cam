@@ -30,4 +30,8 @@ dependencies {
     implementation 'org.tensorflow:tensorflow-lite:2.1.0'
     implementation 'org.tensorflow:tensorflow-lite-gpu:2.1.0'
     implementation 'org.tensorflow:tensorflow-lite-support:0.0.0-nightly'
+    implementation 'com.google.firebase:firebase-core:17.0.0'
+    implementation 'com.google.firebase:firebase-ml-vision:24.0.0'
+    implementation 'com.google.firebase:firebase-ml-vision-face-model:19.0.0'
 }
+apply plugin: 'com.google.gms.google-services'

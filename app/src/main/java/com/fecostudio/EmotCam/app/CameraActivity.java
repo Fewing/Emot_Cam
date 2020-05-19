@@ -35,6 +35,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.Toast;
 
+import com.google.firebase.FirebaseApp;
 import com.otaliastudios.cameraview.BitmapCallback;
 import com.otaliastudios.cameraview.CameraException;
 import com.otaliastudios.cameraview.CameraListener;
@@ -79,7 +80,6 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
     };
     List<String> mPermissionList = new ArrayList<>();
     /*权限获取*/
-    //yzy's variables
     long cam_time = 0;
     private tf tflite = new tf();
     private image_process processer = new image_process();
@@ -91,7 +91,6 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Instance=this;
-
         setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         tflite.load_model(this);//加载tflite模型
@@ -295,7 +294,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
                         bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
                     }//镜像自拍照片
                     float score=0;
-                    Bitmap[] face_maps = processer.process(bitmap);
+                    Bitmap[] face_maps = processer.new_process(bitmap);
                     if (face_maps != null) {
                         for (int i = 0; i < face_maps.length; i++) {
                             score += tflite.predict(face_maps[i], activity);
