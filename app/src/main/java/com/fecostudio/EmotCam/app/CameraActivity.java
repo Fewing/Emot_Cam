@@ -285,14 +285,9 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
             if (mCaptureTime == 0) mCaptureTime = callbackTime - 300;
             //LOG.v("onPictureTaken called! Launching activity. Delay:", callbackTime - mCaptureTime);
             Log.v("拍照时间", (callbackTime - mCaptureTime) + "ms");
-            result.toBitmap(2000, 2000, new BitmapCallback() {
+            result.toBitmap(4000, 4000, new BitmapCallback() {
                 @Override
                 public void onBitmapReady(Bitmap bitmap) {
-                    if(camera.getFacing()== Facing.FRONT) {
-                        Matrix matrix = new Matrix();
-                        matrix.postScale(-1, 1);
-                        bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-                    }//镜像自拍照片
                     float score=0;
                     HashMap<Integer,Bitmap> face_maps = image_process.find_faces(bitmap);
                     if (face_maps != null) {
@@ -583,7 +578,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         mCaptureTime = System.currentTimeMillis();
         Log.v("成功:", "正在拍摄" + picid);
         //Toast.makeText(this, picid, Toast.LENGTH_SHORT).show();
-        camera.takePicture();
+        camera.takePictureSnapshot();
     }
 
     private void toggleCamera() {

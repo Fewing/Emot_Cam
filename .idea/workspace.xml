@@ -2,7 +2,9 @@
 <project version="4">
   <component name="AndroidLayouts">
     <shared>
-      <config />
+      <config>
+        <device id="pixel_3a_xl" />
+      </config>
     </shared>
   </component>
   <component name="AndroidLogFilters">
@@ -14,8 +16,6 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/app.iml" beforeDir="false" afterPath="$PROJECT_DIR$/app/app.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/fecostudio/EmotCam/app/CameraActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/fecostudio/EmotCam/app/CameraActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/fecostudio/EmotCam/app/image_process.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/fecostudio/EmotCam/app/image_process.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cameraview/cameraview.iml" beforeDir="false" afterPath="$PROJECT_DIR$/cameraview/cameraview.iml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
