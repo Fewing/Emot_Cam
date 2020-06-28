@@ -58,6 +58,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -82,7 +83,6 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
     /*权限获取*/
     long cam_time = 0;
     private tf tflite = new tf();
-    private image_process processer = new image_process();
     private Activity activity = this;
     private Bitmap bestmap = null;
     private PictureResult bestres = null;//newly add
@@ -294,12 +294,13 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
                         bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
                     }//镜像自拍照片
                     float score=0;
-                    Bitmap[] face_maps = processer.new_process(bitmap);
+                    HashMap<Integer,Bitmap> face_maps = image_process.find_faces(bitmap);
                     if (face_maps != null) {
-                        for (int i = 0; i < face_maps.length; i++) {
-                            score += tflite.predict(face_maps[i], activity);
+                        for (HashMap.Entry<Integer,Bitmap> entry : face_maps.entrySet()) {
+                            Log.v("id", entry.getKey().toString());
+                            score += tflite.predict(entry.getValue(), activity);
                         }
-                        score /= face_maps.length;
+                        score /= face_maps.size();
                         Log.v("分数", String.valueOf(score));
                     } else {
                         score = 0.0f;
