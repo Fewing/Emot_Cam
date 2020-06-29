@@ -539,6 +539,9 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         switch (view.getId()) {
             case R.id.capturePicture:
                 Toast.makeText(activity, "正在拍摄", Toast.LENGTH_SHORT).show();
+                best_score = 0.0f;
+                bestmap = null;
+                picid = 0;//初始化值
                 capturePicture();
                 cam_time = System.currentTimeMillis();
                 break;
@@ -576,6 +579,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         }*/
         if (camera.isTakingPicture()) return;
         mCaptureTime = System.currentTimeMillis();
+
         Log.v("成功:", "正在拍摄" + picid);
         //Toast.makeText(this, picid, Toast.LENGTH_SHORT).show();
         camera.takePictureSnapshot();
